@@ -1,0 +1,21 @@
+<% var articles=helper() %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Page</title>
+  </head>
+  <body>
+    <% var colors = ['red', 'green', 'blue']; %>
+    <h1>Personal Blog</h1>
+    <div style="display: flex; flex-direction: column; gap: 2">
+        <% for(var i=0; i<articles.length; i++){%>
+      <div style="display: flex; justify-content: space-between">
+        <h3><%= articles[i].title %></h3>
+        <p><%= articles[i].title %></p>
+      </div>
+      <%} %>
+    </div>
+  </body>
+</html>

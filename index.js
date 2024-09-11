@@ -1,28 +1,14 @@
 import fs from "fs";
 import http from "http";
 import ejs from "ejs";
+import helper from "./helper.js";
 
 var server = http.createServer((req, res) => {
   if (req.url === "/home") {
     res.writeHead(200, { "Content-Type": "text/html" });
-    let file = JSON.parse(fs.readFileSync("data/articles.json", "utf-8"));
-    let articles = "";
-    let div = "";
-    file.forEach((f, _) => {
-      let article =
-        "<span style='display:flex; justify-content:space-between;'}><h2>" +
-        f.title +
-        "</h2><p>" +
-        f.date +
-        "</p></span>";
-      articles += article;
-    });
-    div =
-      "<div style='display:flex; flex-direction:column; gap:2'><h1>Personal Blog</h1>" +
-      articles +
-      "</div>";
-    // let html = ejs.render();
-    res.end(div);
+    let htmlData = fs.readFileSync("views/home.ejs", "utf-8");
+    let htmlRenderized = ejs.render(htmlData, { helper: helper });
+    res.end(htmlRenderized);
   }
 });
 
