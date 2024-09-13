@@ -41,7 +41,28 @@ var server = http.createServer((req, res) => {
     if (username === "admin" && password === "admin") {
       res.writeHead(200, { "Content-Type": "text/html" });
       let htmlData = fs.readFileSync("views/admin.ejs", "utf-8");
-      let htmlRenderized = ejs.render(htmlData, {});
+      let htmlRenderized = ejs.render(htmlData, {
+        getArticlesList: getArticlesList,
+      });
+      res.end(htmlRenderized);
+    } else {
+      res.writeHead(401, { "WWW-Authenticate": "Basic realm='user_pages'" });
+      res.end("Authentication Required");
+    }
+  }
+  if (parsedUrl.pathname.startsWith("/edit/")) {
+    const [username, password] = decodeCredentials(
+      req.headers.authorization || ""
+    );
+
+    if (username === "admin" && password === "admin") {
+      res.writeHead(200, { "Content-Type": "text/html" });
+      let htmlData = fs.readFileSync("views/edit.ejs", "utf-8");
+      let articleNumber = parsedUrl.pathname.slice(6);
+      // console.log("article number=", articleNumber);
+      let htmlRenderized = ejs.render(htmlData, {
+        getArticle: getArticle(articleNumber),
+      });
       res.end(htmlRenderized);
     } else {
       res.writeHead(401, { "WWW-Authenticate": "Basic realm='user_pages'" });

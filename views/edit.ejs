@@ -1,0 +1,38 @@
+<% var article=getArticle; %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Update Article</h1>
+    <form
+      action="/update/"
+      style="display: flex; flex-direction: column; gap: 10px; max-width: 400px"
+    >
+      <input
+        name="title"
+        type="text"
+        id="title"
+        value="<%= article[0].title %>"
+      />
+      <input name="date" type="text" id="date" value="<%= article[0].date %>" />
+      <textarea name="content" id="content" cols="30" rows="10">
+            <%= article[0].content %>
+            </textarea
+      >
+      <button type="submit">Update</button>
+    </form>
+    <!-- <script>
+      function handleSubmit(event) {
+        event.preventDefault();
+        let title = document.getElementById("title").value;
+        let date = document.getElementById("date").value;
+        let content = document.getElementById("content").value;
+        console.log("title =", title, " date =", date, "content =", content);
+      }
+    </script> -->
+  </body>
+</html>
