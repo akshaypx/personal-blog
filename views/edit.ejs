@@ -12,6 +12,7 @@
       action="/update/"
       style="display: flex; flex-direction: column; gap: 10px; max-width: 400px"
     >
+      <input name="id" type="text" id="id" value="<%= article[0].id %>" />
       <input
         name="title"
         type="text"
@@ -25,14 +26,5 @@
       >
       <button type="submit">Update</button>
     </form>
-    <!-- <script>
-      function handleSubmit(event) {
-        event.preventDefault();
-        let title = document.getElementById("title").value;
-        let date = document.getElementById("date").value;
-        let content = document.getElementById("content").value;
-        console.log("title =", title, " date =", date, "content =", content);
-      }
-    </script> -->
   </body>
 </html>
