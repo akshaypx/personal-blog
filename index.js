@@ -112,11 +112,75 @@ var server = http.createServer((req, res) => {
           }
         }
       );
-      // if (updated) {
-      //   res.end("<h1>updated!</h1>");
-      // } else {
-      //   res.end("<h1>Error updating!</h1>");
-      // }
+    } else {
+      res.writeHead(401, { "WWW-Authenticate": "Basic realm='user_pages'" });
+      res.end("Authentication Required");
+    }
+  }
+
+  if (parsedUrl.pathname.startsWith("/new/")) {
+    const [username, password] = decodeCredentials(
+      req.headers.authorization || ""
+    );
+
+    if (username === "admin" && password === "admin") {
+      res.writeHead(200, { "Content-Type": "text/html" });
+      let htmlData = fs.readFileSync("views/new.ejs", "utf-8");
+      // let articleNumber = parsedUrl.pathname.slice(6);
+      // console.log("article number=", articleNumber);
+      let htmlRenderized = ejs.render(htmlData);
+      res.end(htmlRenderized);
+    } else {
+      res.writeHead(401, { "WWW-Authenticate": "Basic realm='user_pages'" });
+      res.end("Authentication Required");
+    }
+  }
+
+  if (parsedUrl.pathname.startsWith("/addnew/")) {
+    const [username, password] = decodeCredentials(
+      req.headers.authorization || ""
+    );
+
+    if (username === "admin" && password === "admin") {
+      const queryStr = parsedUrl.query;
+      const data = {
+        title: queryStr.title,
+        date: queryStr.date,
+        content: queryStr.content,
+      };
+      console.log(data);
+      //console.log(queryStr.title, queryStr.date, queryStr.content);
+      let updatedArticles = [];
+      if (fs.existsSync("data/articles.json")) {
+        let articles = JSON.parse(
+          fs.readFileSync("data/articles.json", "utf-8")
+        );
+        updatedArticles = [
+          ...articles,
+          { ...data, id: articles[articles.length - 1].id + 1 },
+        ];
+      } else {
+        updatedArticles = [{ ...data, id: 0 }];
+      }
+      let updated = 0;
+      fs.writeFile(
+        "data/articles.json",
+        JSON.stringify(updatedArticles),
+        (err) => {
+          if (err) {
+            console.log(err);
+            res.end("<h1>Error Creating!</h1>");
+          } else {
+            console.log("Article created successfully");
+            updated = 1;
+            res
+              .writeHead(301, {
+                location: `/admin`,
+              })
+              .end();
+          }
+        }
+      );
     } else {
       res.writeHead(401, { "WWW-Authenticate": "Basic realm='user_pages'" });
       res.end("Authentication Required");
